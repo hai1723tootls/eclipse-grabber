@@ -8,3 +8,4 @@ pywin32
 datetime
 sqlite3
 discord_webhook
+pyinstaller
