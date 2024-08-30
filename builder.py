@@ -5,7 +5,7 @@ from cryptography.fernet import Fernet
 from argparse import ArgumentParser, Namespace
 from subprocess import run, PIPE
 from colorama import Fore, Style
-from obf import *
+from BlankOBFv2 import BlankOBFv2
 
 ly = Fore.LIGHTYELLOW_EX
 oa = Fore.LIGHTMAGENTA_EX
