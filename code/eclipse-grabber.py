@@ -1,4 +1,4 @@
-import os
+import os,marshal,bz2
 import ssl
 import subprocess
 from getpass import getuser
